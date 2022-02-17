@@ -18,7 +18,7 @@ container_name = "arm-container"
  
 # Local folder which contains the text files for upload
 local_path = "./data"
-#os.mkdir(local_path)
+os.mkdir(local_path)
  
 class AzureBlobFileUploader:
   def __init__(self):
@@ -50,6 +50,7 @@ class AzureBlobFileUploader:
       self.upload_text(file_name)
  
     self.clean_up(upload_files_path)
+
   def upload_text(self,file_name):
     # Create blob with same name as local file name
     blob_client = self.blob_service_client.get_blob_client(container=container_name,
