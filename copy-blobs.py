@@ -22,16 +22,16 @@ source_container_client = source_blob_service_client.get_container_client(
 #source_blob = source_container_client.get_blob_client('0036b81e-4efb-4c91-9997-ab6c5e52fb1f.txt')
 #source_url = source_blob.url+'?'+sas_token
 
-connect_str = os.getenv('AZURE_STORAGE_CONNECTION_STRING1')
+target_connect_str = os.getenv('AZURE_STORAGE_CONNECTION_STRING1')
 
 # Create a unique name for the container
 target_container_name = "arm-container1"
 
 # Create the BlobServiceClient object which will be used to create a container client
-#target_blob_service_client = BlobServiceClient.from_connection_string(connect_str)
+target_blob_service_client = BlobServiceClient.from_connection_string(target_connect_str)
 
 #Create the container
-#target_container_client = target_blob_service_client.create_container(target_container_name)
+target_container_client = target_blob_service_client.create_container(target_container_name)
 
 def copy_all_blobs():
     blob_list = source_container_client.list_blobs()
@@ -40,9 +40,22 @@ def copy_all_blobs():
         source_url = source_blob.url+'?'+sas_token
         copy_blob(source_blob, source_url)
 
+    # Clean up the storages
+    clean_up()
+
 # copy one blob at a time
 def copy_blob(source_blob, source_url):
     des_blob_service_client.get_blob_client(
         target_container_name, source_blob.blob_name).start_copy_from_url(source_url)
+
+# Clean up
+def clean_up():
+    print("To clean up and delete containers, click on any key")
+    input()
+
+    print("Deleting source and target containers:")
+    source_container_client.delete_container()
+    target_container_client.delete_container()
+
 
 copy_all_blobs()

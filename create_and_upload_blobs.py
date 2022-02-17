@@ -70,13 +70,13 @@ class AzureBlobFileUploader:
     print("\nPress the Enter key to begin clean up")
     input()
 
-    print("Deleting blob container...")
-    self.client_container.delete_container()
+    #print("Deleting blob container...")
+    #self.client_container.delete_container()
 
     print("Deleting the local source and downloaded files...")
     for file_path in upload_files_path:
       os.remove(file_path)
-    #os.remove(download_file_path)
+    
     os.rmdir(local_path)
 
     print("Done") 
